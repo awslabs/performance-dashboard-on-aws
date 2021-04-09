@@ -22,6 +22,24 @@ export class LambdaFunctions extends cdk.Construct {
   public readonly publicApiHandler: lambda.Function;
   public readonly ddbStreamProcessor: lambda.Function;
 
+  // Suppress cfn_nag Warn W58: Lambda functions require permission to write CloudWatch Logs
+  private cfn_nag_warn_w58(fcn: lambda.Function) {
+    let apimethod: lambda.CfnFunction = fcn.node.findChild(
+      "Resource"
+    ) as lambda.CfnFunction;
+    apimethod.cfnOptions.metadata = {
+      cfn_nag: {
+        rules_to_suppress: [
+          {
+            id: "W58",
+            reason:
+              "Function has AWSLambdaBasicExecutionRole which provides write permissions to CloudWatch Logs",
+          },
+        ],
+      },
+    };
+  }
+
   constructor(scope: cdk.Construct, id: string, props: Props) {
     super(scope, id);
 
@@ -44,6 +62,7 @@ export class LambdaFunctions extends cdk.Construct {
         LOG_LEVEL: "info",
       },
     });
+    this.cfn_nag_warn_w58(this.apiHandler);
 
     // This function handles traffic coming from the public.
     // It provides flexibility to define specific throttling limits
@@ -64,6 +83,7 @@ export class LambdaFunctions extends cdk.Construct {
         LOG_LEVEL: "info",
       },
     });
+    this.cfn_nag_warn_w58(this.publicApiHandler);
 
     // The DynamoDB Stream processor is a Lambda function that triggers
     // based on the stream from the Main table. Its primary function is to
@@ -87,6 +107,7 @@ export class LambdaFunctions extends cdk.Construct {
         },
       }
     );
+    this.cfn_nag_warn_w58(this.ddbStreamProcessor);
 
     // Connect the Lambda function to the DynamoDB Stream of the main table
     this.ddbStreamProcessor.addEventSource(
