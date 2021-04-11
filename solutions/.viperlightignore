@@ -1,0 +1,28 @@
+backend/README.md
+backend/integtests/Versioning Edge Cases.postman_collection.json
+cdk/package-lock.json
+frontend/README.md
+frontend/src/containers/EditPublishingGuidance.tsx
+frontend/src/containers/PublishingGuidanceSettings.tsx
+frontend/src/containers/__tests__/PublishingGuidanceSettings.test.tsx
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+backend/integtests/IntegrationTestSuite.postman_collection.json
+backend/postman/Performance Dashboard API.postman_collection.json
+backend/src/lib/controllers/__tests__/user-ctrl.test.ts
+backend/src/lib/factories/__tests__/user-factory.test.ts
+backend/src/lib/repositories/__tests__/user-repo.test.ts
+backend/src/lib/services/__tests__/auth.test.ts
+backend/src/lib/services/auth.ts
+cdk/lib/frontend-stack.ts
+cdk/lib/pipeline-stack.ts
+docs/installation.md
+frontend/README.md
+frontend/src/containers/__tests__/AddUsers.test.tsx
+frontend/src/containers/__tests__/ChangeRole.test.tsx
+frontend/src/containers/__tests__/UserListing.test.tsx
+frontend/src/hooks/__mocks__/index.tsx
+frontend/src/services/EnvConfig.ts
+frontend/src/services/__tests__/BackendService.test.ts
+frontend/src/services/__tests__/EnvConfig.test.ts
+docs/user-guide.pdf

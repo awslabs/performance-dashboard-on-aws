@@ -1,0 +1,32 @@
+#! /bin/bash
+#
+# Setup directory structure to that expected by Solutions as described at https://valence.solutions.architecture.aws.a2z.com/#/developer-guide
+#
+# Run this script in the ./solutions directory
+set -x
+
+HOMEDIR="$(echo $(cd ../ && pwd))"
+SOURCEDIR=$HOMEDIR/source
+mkdir $SOURCEDIR
+
+# Copy source code 
+if [ -d "$HOMEDIR/frontend/node_modules" ]; then rm -Rf $HOMEDIR/frontend/node_modules; fi
+cp -r $HOMEDIR/frontend $SOURCEDIR
+
+if [ -d "$HOMEDIR/backend/node_modules" ]; then rm -Rf $HOMEDIR/backend/node_modules; fi
+cp -r $HOMEDIR/backend $SOURCEDIR
+
+if [ -d "$HOMEDIR/cdk/node_modules" ]; then rm -Rf $HOMEDIR/cdk/node_modules; fi
+if [ -d "$HOMEDIR/cdk/cdk.out" ]; then rm -Rf $HOMEDIR/cdk/cdk.out; fi
+cp -r $HOMEDIR/cdk $SOURCEDIR
+
+cp $HOMEDIR/install.sh $SOURCEDIR
+cp $HOMEDIR/deploy.sh $SOURCEDIR
+cp $HOMEDIR/test.sh $SOURCEDIR
+
+# Copy top level docs to expected names
+touch $HOMEDIR/CHANGELOG.mkdir
+mv $HOMEDIR/LICENSE $HOMEDIR/LICENSE.md
+mv $HOMEDIR/NOTICE $HOMEDIR/NOTICE.txt
+
+cp $HOMEDIR/solutions/buildspec.yml $HOMEDIR
