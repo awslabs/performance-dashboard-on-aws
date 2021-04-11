@@ -3,11 +3,11 @@
 # Setup directory structure to that expected by Solutions as described at https://valence.solutions.architecture.aws.a2z.com/#/developer-guide
 #
 # Run this script in the ./solutions directory
-set -x
+# set -x
 
 HOMEDIR="$(echo $(cd ../ && pwd))"
 SOURCEDIR=$HOMEDIR/source
-mkdir $SOURCEDIR
+if [ ! -d "$SOURCEDIR" ]; then mkdir $SOURCEDIR; fi
 
 # Copy source code 
 if [ -d "$HOMEDIR/frontend/node_modules" ]; then rm -Rf $HOMEDIR/frontend/node_modules; fi
