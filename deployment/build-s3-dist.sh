@@ -77,8 +77,8 @@ echo "[Synth] CDK Project"
 echo "------------------------------------------------------------------------------"
 
 # Run 'cdk synth' to generate raw solution outputs
-echo "cd $template_dir/.."
-cd $template_dir/..
+echo "cd $source_dir"
+cd $source_dir
 echo "chmod +x ./package.sh && ./package.sh release $staging_dist_dir"
 chmod +x ./package.sh && ./package.sh release $staging_dist_dir
 

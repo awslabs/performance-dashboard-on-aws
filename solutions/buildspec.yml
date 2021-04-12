@@ -3,19 +3,20 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 10    
+      nodejs: 10
     commands:
       - echo "nothing to do in install"
   pre_build:
     commands:
       - echo "Installing dependencies and executing unit tests - `pwd`"
+      - cd source
       - chmod +x ./install.sh && ./install.sh
       - chmod +x ./test.sh && ./test.sh
       - echo "Installing dependencies and executing unit tests completed `date`"
   build:
     commands:
       - echo "Starting build `date` in `pwd`"
-      - cd deployment
+      - cd ../deployment
       - chmod +x ./build-s3-dist.sh && ./build-s3-dist.sh $DIST_OUTPUT_BUCKET $SOLUTION_NAME $VERSION
       - echo "Build completed `date`"
       - echo "Starting open-source-dist `date` in `pwd`"
@@ -31,7 +32,7 @@ phases:
 
 artifacts:
   files:
-      - deployment/**/*
-      - buildspec.yml
-      - CHANGELOG.md
-      - .cfnnagignore
+    - deployment/**/*
+    - buildspec.yml
+    - CHANGELOG.md
+    - .cfnnagignore

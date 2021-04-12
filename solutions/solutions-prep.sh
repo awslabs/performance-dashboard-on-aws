@@ -28,6 +28,7 @@ echo "copy scripts to /source"
 cp $HOMEDIR/install.sh $SOURCEDIR
 cp $HOMEDIR/deploy.sh $SOURCEDIR
 cp $HOMEDIR/test.sh $SOURCEDIR
+cp package.sh $SOURCEDIR
 
 # Copy top level docs to expected names
 echo "setup top level *.md files"
