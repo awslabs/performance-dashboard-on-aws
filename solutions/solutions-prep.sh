@@ -38,3 +38,4 @@ mv $HOMEDIR/NOTICE $HOMEDIR/NOTICE.txt
 
 cp $HOMEDIR/buildspec.yml $HOMEDIR/buildspec-forgithub.yml
 cp $HOMEDIR/solutions/buildspec.yml $HOMEDIR
+cp $HOMEDIR/solutions/.viperlightignore $HOMEDIR
