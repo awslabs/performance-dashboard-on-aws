@@ -32,7 +32,7 @@ cp package.sh $SOURCEDIR
 
 # Copy top level docs to expected names
 echo "setup top level *.md files"
-touch $HOMEDIR/CHANGELOG.mkdir
+touch $HOMEDIR/CHANGELOG.md
 mv $HOMEDIR/LICENSE $HOMEDIR/LICENSE.md
 mv $HOMEDIR/NOTICE $HOMEDIR/NOTICE.txt
 
