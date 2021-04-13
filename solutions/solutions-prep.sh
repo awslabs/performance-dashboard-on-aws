@@ -33,10 +33,9 @@ cp package.sh $SOURCEDIR
 
 # Copy top level docs to expected names
 echo "setup top level *.md files"
-touch $HOMEDIR/CHANGELOG.md
 mv $HOMEDIR/LICENSE $HOMEDIR/LICENSE.md
 mv $HOMEDIR/NOTICE $HOMEDIR/NOTICE.txt
 
-cp $HOMEDIR/buildspec.yml $HOMEDIR/buildspec-forgithub.yml
 cp $HOMEDIR/solutions/buildspec.yml $HOMEDIR
 cp $HOMEDIR/solutions/.viperlightignore $HOMEDIR
+cp $HOMEDIR/solutions/CHANGELOG.md $HOMEDIR
