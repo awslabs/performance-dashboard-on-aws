@@ -8,6 +8,7 @@
 HOMEDIR="$(echo $(cd ../ && pwd))"
 SOURCEDIR=$HOMEDIR/source
 echo "create /source"
+if [ -d "$SOURCEDIR" ]; then rm -rf $SOURCEDIR; fi
 if [ ! -d "$SOURCEDIR" ]; then mkdir $SOURCEDIR; fi
 
 # Copy source code 
