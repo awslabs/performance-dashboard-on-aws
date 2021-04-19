@@ -79,6 +79,8 @@ echo "--------------------------------------------------------------------------
 # Run 'cdk synth' to generate raw solution outputs
 echo "cd $source_dir"
 cd $source_dir
+echo "chmod +x ./install.sh && ./install.sh"
+chmod +x ./install.sh && ./install.sh
 echo "chmod +x ./package.sh && ./package.sh release $staging_dist_dir"
 chmod +x ./package.sh && ./package.sh release $staging_dist_dir
 
@@ -92,41 +94,48 @@ echo "--------------------------------------------------------------------------
 echo "[Packing] Template artifacts"
 echo "------------------------------------------------------------------------------"
 
-# Move outputs from staging to template_dist_dir
-echo "Move outputs from staging to template_dist_dir"
-echo "cp $template_dir/*.template $template_dist_dir/"
-cp $staging_dist_dir/*.template.json $template_dist_dir/
+# Move outputs from staging to build_dist_dir
+echo "Move outputs from staging to build_dist_dir"
+echo "cp $staging_dist_dir/*.template.json $build_dist_dir/"
+cp $staging_dist_dir/*.template.json $build_dist_dir/
+cp $template_dir/performance-dashboard-on-aws.template $template_dist_dir/
 rm *.template.json
 
-# Rename all *.template.json files to *.template
-echo "Rename all *.template.json to *.template"
-echo "copy templates and rename"
-for f in $template_dist_dir/*.template.json; do
-    mv -- "$f" "${f%.template.json}.template"
+declare -a template_locations=("$template_dist_dir" "$build_dist_dir" )
+
+for loc in ${template_locations[@]}; do
+   echo "Processing templates in $loc"
+
+   # Rename all *.template.json files to *.template
+    echo "Rename all *.template.json to *.template"
+    echo "copy templates and rename"
+    for f in $loc/*.template.json; do
+        mv -- "$f" "${f%.template.json}.template"
+    done
+
+    # Run the helper to clean-up the templates and remove unnecessary CDK elements
+    echo "Run the helper to clean-up the templates and remove unnecessary CDK elements"
+    echo "node $template_dir/cdk-solution-helper/index $loc"
+    node $template_dir/cdk-solution-helper/index $loc
+    if [ "$?" = "1" ]; then
+        echo "(cdk-solution-helper) ERROR: there is likely output above." 1>&2
+        exit 1
+    fi
+
+    # Find and replace bucket_name, solution_name, and version
+    echo "Find and replace bucket_name, solution_name, and version"
+    cd $loc
+    echo "Updating code source bucket in template with $1"
+    replace="s/%%BUCKET_NAME%%/$1/g"
+    echo "sed -i '' -e $replace $loc/*.template"
+    sed -i '' -e $replace $loc/*.template
+    replace="s/%%SOLUTION_NAME%%/$2/g"
+    echo "sed -i '' -e $loc/*.template"
+    sed -i '' -e $replace $loc/*.template
+    replace="s/%%VERSION%%/$3/g"
+    echo "sed -i '' -e $replace $loc/*.template"
+    sed -i '' -e $replace $loc/*.template
 done
-
-# Run the helper to clean-up the templates and remove unnecessary CDK elements
-echo "Run the helper to clean-up the templates and remove unnecessary CDK elements"
-echo "node $template_dir/cdk-solution-helper/index"
-node $template_dir/cdk-solution-helper/index
-if [ "$?" = "1" ]; then
-	echo "(cdk-solution-helper) ERROR: there is likely output above." 1>&2
-	exit 1
-fi
-
-# Find and replace bucket_name, solution_name, and version
-echo "Find and replace bucket_name, solution_name, and version"
-cd $template_dist_dir
-echo "Updating code source bucket in template with $1"
-replace="s/%%BUCKET_NAME%%/$1/g"
-echo "sed -i '' -e $replace $template_dist_dir/*.template"
-sed -i '' -e $replace $template_dist_dir/*.template
-replace="s/%%SOLUTION_NAME%%/$2/g"
-echo "sed -i '' -e $replace $template_dist_dir/*.template"
-sed -i '' -e $replace $template_dist_dir/*.template
-replace="s/%%VERSION%%/$3/g"
-echo "sed -i '' -e $replace $template_dist_dir/*.template"
-sed -i '' -e $replace $template_dist_dir/*.template
 
 echo "------------------------------------------------------------------------------"
 echo "[Packing] Source code artifacts"
@@ -140,51 +149,36 @@ find $staging_dist_dir -iname "package-lock.json" -type f -exec rm -f "{}" \; 2>
 
 # ... For each asset.* source code artifact in the temporary /staging folder...
 cd $staging_dist_dir
-for d in `find . -mindepth 1 -maxdepth 1 -type d`; do
 
-    # Rename the artifact, removing the period for handler compatibility
-    pfname="$(basename -- $d)"
-    fname="$(echo $pfname | sed -e 's/\.//g')"
-    echo "zip -r $fname.zip $fname"
-    mv $d $fname
+echo "cp *.zip $build_dist_dir"
+cp *.zip $build_dist_dir
+
+for fname in `find . -mindepth 1 -maxdepth 1 -type d`; do
 
     # Build the artifcats
-    if ls $fname/*.py 1> /dev/null 2>&1; then
-        echo "===================================="
-        echo "This is Python runtime"
-        echo "===================================="
-        cd $fname
-        venv_folder="./venv-prod/"
-        rm -fr .venv-test
-        rm -fr .venv-prod
-        echo "Initiating virtual environment"
-        python3 -m venv $venv_folder
-        source $venv_folder/bin/activate
-        pip3 install -q -r requirements.txt --target .
-        deactivate
-        cd $staging_dist_dir/$fname/$venv_folder/lib/python3.*/site-packages
-        echo "zipping the artifact"
-        zip -qr9 $staging_dist_dir/$fname.zip .
-        cd $staging_dist_dir/$fname
-        zip -gq $staging_dist_dir/$fname.zip *.py util/*
-        cd $staging_dist_dir
-    elif ls $fname/*.js 1> /dev/null 2>&1; then
+    if ls $fname/package.json 1> /dev/null 2>&1; then
         echo "===================================="
         echo "This is Node runtime"
         echo "===================================="
         cd $fname
         echo "Clean and rebuild artifacts"
         npm run clean
-        npm ci
+        npm install --production
         if [ "$?" = "1" ]; then
 	        echo "ERROR: Seems like package-lock.json does not exists or is out of sync with package.josn. Trying npm install instead" 1>&2
             npm install
         fi
-        cd $staging_dist_dir
         # Zip the artifact
-        echo "zip -r $fname.zip $fname"
-        zip -rq $fname.zip $fname
+        echo "zip -r ../$fname.zip *"
+        zip -rq ../$fname.zip *
+    else
+        cd $fname
+        # Zip the artifact
+        echo "zip -rq ../$fname.zip *"
+        zip -rq ../$fname.zip *
     fi
+
+    cd $staging_dist_dir
 
     # Copy the zipped artifact from /staging to /regional-s3-assets
     echo "cp $fname.zip $build_dist_dir"

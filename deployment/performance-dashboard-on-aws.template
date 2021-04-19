@@ -1,0 +1,66 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "adminEmail": {
+      "Type": "String",
+      "Description": "Email address for the admin user",
+      "MinLength": 5
+    }
+  },
+  "Resources": {
+    "authStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": {"Fn::Sub" : "https://%%BUCKET_NAME%%-${AWS::Region}.s3.amazonaws.com/%%SOLUTION_NAME%%/%%VERSION%%/Auth.template"},
+        "TimeoutInMinutes": "60",
+        "Parameters": {
+          "adminEmail": {"Ref" : "adminEmail"}
+        }
+      }
+    },
+    "backendStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "DependsOn": "authStack",
+      "Properties": {
+        "TemplateURL": {"Fn::Sub" : "https://%%BUCKET_NAME%%-${AWS::Region}.s3.amazonaws.com/%%SOLUTION_NAME%%/%%VERSION%%/Backend.template"},
+        "TimeoutInMinutes": "60"
+      }
+    },
+    "lambdaEdgeStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "DependsOn": "backendStack",
+      "Properties": {
+        "TemplateURL": {"Fn::Sub" : "https://%%BUCKET_NAME%%-${AWS::Region}.s3.amazonaws.com/%%SOLUTION_NAME%%/%%VERSION%%/lambda-at-edge-support-stack.template"},
+        "TimeoutInMinutes": "60"
+      }
+    },
+    "frontendStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "DependsOn": "lambdaEdgeStack",
+      "Properties": {
+        "TemplateURL": {"Fn::Sub" : "https://%%BUCKET_NAME%%-${AWS::Region}.s3.amazonaws.com/%%SOLUTION_NAME%%/%%VERSION%%/Frontend.template"},
+        "TimeoutInMinutes": "60"
+      }
+    },
+    "opsStack": {
+      "Type": "AWS::CloudFormation::Stack",
+      "DependsOn": "frontendStack",
+      "Properties": {
+        "TemplateURL": {"Fn::Sub" : "https://%%BUCKET_NAME%%-${AWS::Region}.s3.amazonaws.com/%%SOLUTION_NAME%%/%%VERSION%%/Ops.template"},
+        "TimeoutInMinutes": "60"
+      }
+    }
+  },
+  "Outputs": {
+    "StackRef": {
+      "Value": {
+        "Ref": "frontendStack"
+      }
+    },
+    "OutputFromNestedStack": {
+      "Value": {
+        "Fn::GetAtt": ["frontendStack", "Outputs.CloudFrontURL"]
+      }
+    }
+  }
+}
