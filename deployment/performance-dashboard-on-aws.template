@@ -30,7 +30,7 @@
       "Type": "AWS::CloudFormation::Stack",
       "DependsOn": "backendStack",
       "Properties": {
-        "TemplateURL": {"Fn::Sub" : "https://%%BUCKET_NAME%%-${AWS::Region}.s3.amazonaws.com/%%SOLUTION_NAME%%/%%VERSION%%/lambda-at-edge-support-stack.template"},
+        "TemplateURL": {"Fn::Sub" : "https://%%BUCKET_NAME%%-${AWS::Region}.s3.amazonaws.com/%%SOLUTION_NAME%%/%%VERSION%%/LambdaEdge.template"},
         "TimeoutInMinutes": "60"
       }
     },

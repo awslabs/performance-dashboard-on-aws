@@ -29,6 +29,7 @@ echo "copy scripts to /source"
 mv $HOMEDIR/install.sh $SOURCEDIR
 mv $HOMEDIR/deploy.sh $SOURCEDIR
 mv $HOMEDIR/test.sh $SOURCEDIR
+mv $HOMEDIR/release.sh $SOURCEDIR
 cp package.sh $SOURCEDIR
 
 # Copy top level docs to expected names

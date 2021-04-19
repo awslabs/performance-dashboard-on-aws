@@ -137,6 +137,8 @@ for loc in ${template_locations[@]}; do
     sed -i '' -e $replace $loc/*.template
 done
 
+mv $build_dist_dir/lambda-at-edge-support-stack.template $build_dist_dir/LambdaEdge.template
+
 echo "------------------------------------------------------------------------------"
 echo "[Packing] Source code artifacts"
 echo "------------------------------------------------------------------------------"
