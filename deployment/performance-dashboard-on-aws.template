@@ -1,5 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "(SO0157) Performance Dashboard on AWS Solution Implementation v1.0.0",
   "Parameters": {
     "adminEmail": {
       "Type": "String",
