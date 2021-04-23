@@ -137,6 +137,9 @@ for loc in ${template_locations[@]}; do
     sed -i '' -e $replace $loc/*.template
 done
 
+# Place in both regional and global folders.  Parent CFT embeds regional instance.
+# Customers can access it directly in global folder to install it independently of parent CFT
+cp $build_dist_dir/lambda-at-edge-support-stack.template $template_dist_dir/LambdaEdge.template
 mv $build_dist_dir/lambda-at-edge-support-stack.template $build_dist_dir/LambdaEdge.template
 
 echo "------------------------------------------------------------------------------"
