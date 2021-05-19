@@ -70,3 +70,7 @@ e2e-tests/README.md:20
 # Potential password in file                                 Check line number: 20                      
 source/frontend/src/services/StorageService.ts:129
 # Potential AWS Key in file                                  Check line number: 129                     
+docs/installation.md:112
+# Potential email address discovered Check line number: 112
+source/backend/integtests/IntegrationTestSuite.postman_collection.json:1897
+# Potential email address discovered Check line number: 1897
