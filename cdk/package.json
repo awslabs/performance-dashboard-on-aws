@@ -1,6 +1,6 @@
 {
   "name": "performance-dashboard-cdk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Performance Dashboard on AWS CDK",
   "bin": {
     "cdk": "bin/main.js"

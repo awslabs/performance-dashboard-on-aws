@@ -1,6 +1,6 @@
 {
   "name": "performance-dashboard-backend",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Performance Dashboard on AWS Backend",
   "scripts": {
     "test": "LOG_LEVEL=SILENT jest --coverage --watchAll",

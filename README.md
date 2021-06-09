@@ -33,14 +33,14 @@ PDoA comes with pre-built code to provision an instance in your AWS account. You
 
 | Region               | Launch                                                                                                                                                                                                                                                                                                                             |
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Install in us-east-1 | [![Install in us-east-1](docs/images/launch-stack.svg)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://performance-dashboard-on-aws-solution-releases-us-west-2.s3.us-west-2.amazonaws.com/performance-dashboard-on-aws/v1.0.2/performance-dashboard-on-aws.template) |
+| Install in us-east-1 | [![Install in us-east-1](docs/images/launch-stack.svg)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://performance-dashboard-on-aws-solution-releases-us-west-2.s3.us-west-2.amazonaws.com/performance-dashboard-on-aws/v1.0.3/performance-dashboard-on-aws.template) |
 
 ### Clone this repository
 
-The mainline branch of this repository develops rapidly. If you want to obtain the latest stable copy of the code, clone this repository using the tag of the most recent release, which currently is 1.0.2.
+The mainline branch of this repository develops rapidly. If you want to obtain the latest stable copy of the code, clone this repository using the tag of the most recent release, which currently is 1.0.3.
 
 ```
-$ git clone -b 1.0.2 https://github.com/awslabs/performance-dashboard-on-aws.git
+$ git clone -b 1.0.3 https://github.com/awslabs/performance-dashboard-on-aws.git
 ```
 
 ## Security
