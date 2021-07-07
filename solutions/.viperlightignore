@@ -74,3 +74,5 @@ docs/installation.md:112
 # Potential email address discovered Check line number: 112
 source/backend/integtests/IntegrationTestSuite.postman_collection.json:1897
 # Potential email address discovered Check line number: 1897
+source/frontend/src/locales/en/translation.json:396
+# Amazon Internal: Potential confidential designation found
