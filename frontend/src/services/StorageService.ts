@@ -175,7 +175,19 @@ async function uploadImage(
 }
 
 async function uploadLogo(rawFile: File): Promise<string> {
-  return await uploadImage(rawFile, "logo", EnvConfig.contentBucket);
+  const mimeType = rawFile.type;
+  const extension = imageFileTypes[mimeType as keyof ValidFileTypes];
+
+  if (!extension) {
+    throw new Error("File type is not supported");
+  }
+
+  const fileS3Key = "uploadedLogo".concat(extension);
+  const dir = "logo/";
+
+  await uploadFile(rawFile, dir.concat(fileS3Key), EnvConfig.contentBucket);
+
+  return fileS3Key;
 }
 
 const StorageService = {

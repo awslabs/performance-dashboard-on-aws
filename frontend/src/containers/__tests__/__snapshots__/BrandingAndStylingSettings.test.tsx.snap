@@ -178,6 +178,7 @@ exports[`branding and styling settings should match snapshot 1`] = `
             >
               <img
                 alt="Organization logo"
+                hidden=""
                 src="logo.svg"
               />
             </div>

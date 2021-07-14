@@ -14,7 +14,7 @@ export function useLogo(s3Key?: string): UseLogoHook {
     if (s3Key) {
       try {
         setLoading(true);
-        const data = await StorageService.downloadLogo(s3Key);
+        const data = await StorageService.downloadLogo(s3Key, () => {});
         setFile(data);
         setLoading(false);
       } catch (err) {
